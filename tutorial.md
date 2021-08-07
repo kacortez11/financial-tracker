@@ -31,3 +31,4 @@ runserver 8000
 * admin.site.register(Product)
 * to start over, can delete all migrations +dbsqlite during dev/learning
 * blank=False on models means required
+* on foreign keys' related names, dont include the _id

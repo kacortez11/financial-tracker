@@ -15,7 +15,7 @@ class BaseModel(Model):
 
 
 class BaseUserModel(BaseModel):
-    user_id = ForeignKey('users.User', PROTECT, null=True)
+    user = ForeignKey('users.User', PROTECT, null=True)
 
     class Meta:
         abstract = True

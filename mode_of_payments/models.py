@@ -1,7 +1,7 @@
 from django.db.models import (
     BooleanField,
     CharField,
-    DateField, DecimalField, PositiveIntegerField, URLField, UniqueConstraint,
+    DateField, DecimalField, PositiveIntegerField, URLField, UniqueConstraint, PositiveSmallIntegerField,
 )
 
 
@@ -48,24 +48,26 @@ class ModeOfPayment(BaseUserModel):
     value = CharField(max_length=32, null=False)
     label = CharField(max_length=32, null=False)
     type = CharField(max_length=32, choices=TYPES, null=False)
-    debit = BooleanField(default=True)
-    credit = BooleanField(default=False)
-    starting_balance = DecimalField(decimal_places=2, max_digits=32, default=0)
-    interest_rate_per_annum = DecimalField(decimal_places=2, max_digits=32, default=0)
-    interest_credited_at = PositiveIntegerField(default=SOM)
-    frequency_of_interest_computation = CharField(max_length=16, choices=FREQUENCY_OF_INTEREST_TYPES, null=True)
-    frequency_of_interest_crediting = CharField(max_length=16, choices=FREQUENCY_OF_INTEREST_TYPES, null=True)
-    days_in_a_year = PositiveIntegerField(choices=DAYS_IN_A_YEAR, null=True)
-    minimum_maintaining_balance = DecimalField(decimal_places=2, max_digits=32, default=0)
-    cut_off = PositiveIntegerField(null=True)
-    currency = CharField(max_length=4, default='PHP', null=False)
-    branch = CharField(max_length=64, null=True)
-    account_number = CharField(max_length=32, null=True)
+    debit = BooleanField(default=True)  # False means credit
     is_active = BooleanField(default=True)
     date_deactivated = DateField(null=True)
+    priority = PositiveIntegerField(default=99)
+    default = BooleanField(default=False)
+
+    currency = CharField(max_length=4, default='PHP', null=False)
+    starting_balance = DecimalField(decimal_places=2, max_digits=32, default=0)
+    # Savings related
+    interest_rate_per_annum = DecimalField(decimal_places=2, max_digits=5, default=0)
+    interest_credited_at = PositiveSmallIntegerField(default=SOM)
+    frequency_of_interest_computation = CharField(max_length=16, choices=FREQUENCY_OF_INTEREST_TYPES, null=True)
+    frequency_of_interest_crediting = CharField(max_length=16, choices=FREQUENCY_OF_INTEREST_TYPES, null=True)
+    days_in_a_year = PositiveSmallIntegerField(choices=DAYS_IN_A_YEAR, null=True)
+    minimum_maintaining_balance = DecimalField(decimal_places=2, max_digits=32, default=0)
+    # Credit related
+    cut_off = PositiveSmallIntegerField(null=True)
+
+    branch = CharField(max_length=64, null=True)
+    account_number = CharField(max_length=32, null=True)
     website = URLField(max_length=256, null=True)
     login_url = CharField(max_length=32, null=True)
-    default = BooleanField(default=False)
-    priority = PositiveIntegerField(default=99)
-
 
