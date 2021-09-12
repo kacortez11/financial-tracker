@@ -17,3 +17,9 @@ class Income(BaseUserModel):
 		PROTECT,
 		related_name='income_mode_of_payment'
 	)
+	invoice = ForeignKey(
+		'invoices.Invoice',
+		PROTECT,
+		related_name='payment_invoice',
+		null=True
+	)

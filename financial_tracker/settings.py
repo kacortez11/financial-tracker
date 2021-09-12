@@ -45,8 +45,10 @@ INSTALLED_APPS = [
     'mode_of_payments',
     'categories',
     'expenses',
+    'invoices',
     'incomes',
     'transfers',
+    'pages',
 ]
 
 #How requests are handled

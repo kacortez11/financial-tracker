@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>About page</h1>
+    <p>
+    {{ request.user }}
+    {{ my_context }}
+    {{ my_number }}
+    </p>
+    <ul>
+        {% for l in my_list %}
+            {%  if l + 2 > 100 %}
+                <li>{{ l }} {{ l|add:10 }}</li>
+            {% else %}
+                <li>{{ l }}yiss</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock content %}

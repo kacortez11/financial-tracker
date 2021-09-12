@@ -1,8 +1,9 @@
 from django.db.models import (
-	BooleanField, ForeignKey, PROTECT, DateField, DecimalField, UniqueConstraint
+	BooleanField, ForeignKey, PROTECT, DateField, DecimalField, UniqueConstraint, CharField, OneToOneField
 )
 
 from core.models import BaseModel, BaseUserModel
+from invoices.models import Invoice
 
 
 class Expense(BaseUserModel):
@@ -17,25 +18,51 @@ class Expense(BaseUserModel):
 	my_share = DecimalField(decimal_places=2, max_digits=32)
 	merchandise_total = DecimalField(decimal_places=2, max_digits=32)
 	merchandise_discount = DecimalField(decimal_places=2, max_digits=32, default=0)
-	shipping_fee = DecimalField(decimal_places=2, max_digits=32)
+	shipping_fee = DecimalField(decimal_places=2, max_digits=32, default=0)
 	shipping_discount = DecimalField(decimal_places=2, max_digits=32, default=0)
 	service_fee = DecimalField(decimal_places=2, max_digits=32, default=0)
 	expected_cashback = DecimalField(decimal_places=2, max_digits=32, default=0)
 	is_pending = BooleanField(default=False)
 	is_reversal = BooleanField(default=False)
-	expense = ForeignKey(
-		'Expense',
-		PROTECT,
-		related_name='expense_for_reversal', null=True
-	)
 	category = ForeignKey(
 		'categories.Category',
 		PROTECT,
-		related_name='expense_category', null=True
+		related_name='expense_category',
+		null=True
 	)
+
+
+class Reversal(Expense):
+	expense = ForeignKey(
+		'Expense',
+		PROTECT,
+		related_name='expense_for_reversal',
+		null=True
+	)
+	date_reversed = DateField(null=True)
 
 	class Meta:
 		constraints = [
-			UniqueConstraint(fields=['id', 'expense'], name='unique_expense_for_reversal'),
+			UniqueConstraint(
+				fields=['expense'],
+				name='unique_expense_for_reversal'
+			),
 		]
 
+
+class Share(BaseModel):
+	expense = ForeignKey(
+		'Expense',
+		PROTECT,
+		related_name='shared_expense',
+		null=False
+	)
+	shared_with = CharField(max_length=32, null=False)
+	share = DecimalField(decimal_places=2, max_digits=32, null=False)
+	paid = BooleanField(default=False)
+	invoice = ForeignKey(
+		'invoices.Invoice',
+		PROTECT,
+		related_name='share_invoice',
+		null=True
+	)

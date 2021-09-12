@@ -16,6 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from pages.views import home_view, about_view, contact_view
+from expenses.views import expenses_detailed_view
+from mode_of_payments.views import (
+    mode_of_payment_create_view,
+    mode_of_payment_detailed_view
+)
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', home_view),
+    path('about', about_view),
+    path('contact', contact_view),
+    path('expense/', expenses_detailed_view),
+    path('mode_of_payments/', mode_of_payment_detailed_view),
+    path('mode_of_payments/create', mode_of_payment_create_view),
 ]

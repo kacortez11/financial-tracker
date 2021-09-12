@@ -65,7 +65,6 @@ class ModeOfPayment(BaseUserModel):
     minimum_maintaining_balance = DecimalField(decimal_places=2, max_digits=32, default=0)
     # Credit related
     cut_off = PositiveSmallIntegerField(null=True)
-
     branch = CharField(max_length=64, null=True)
     account_number = CharField(max_length=32, null=True)
     website = URLField(max_length=256, null=True)
