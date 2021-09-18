@@ -56,17 +56,48 @@ class ModeOfPayment(BaseUserModel):
 
     currency = CharField(max_length=4, default='PHP', null=False)
     starting_balance = DecimalField(decimal_places=2, max_digits=32, default=0)
+
     # Savings related
-    interest_rate_per_annum = DecimalField(decimal_places=2, max_digits=5, default=0)
-    interest_credited_at = PositiveSmallIntegerField(default=SOM)
-    frequency_of_interest_computation = CharField(max_length=16, choices=FREQUENCY_OF_INTEREST_TYPES, null=True)
-    frequency_of_interest_crediting = CharField(max_length=16, choices=FREQUENCY_OF_INTEREST_TYPES, null=True)
-    days_in_a_year = PositiveSmallIntegerField(choices=DAYS_IN_A_YEAR, null=True)
-    minimum_maintaining_balance = DecimalField(decimal_places=2, max_digits=32, default=0)
+    interest_rate_per_annum = DecimalField(
+        decimal_places=2,
+        max_digits=5,
+        default=0,
+        blank=True,
+        null=True
+    )
+    interest_credited_at = PositiveSmallIntegerField(
+        default=SOM,
+        blank=True,
+        null=True
+    )
+    frequency_of_interest_computation = PositiveSmallIntegerField(
+        choices=FREQUENCY_OF_INTEREST_TYPES,
+        blank=True,
+        null=True
+    )
+    frequency_of_interest_crediting = PositiveSmallIntegerField(
+        choices=FREQUENCY_OF_INTEREST_TYPES,
+        blank=True,
+        null=True
+    )
+    days_in_a_year = PositiveSmallIntegerField(
+        choices=DAYS_IN_A_YEAR,
+        blank=True,
+        null=True
+    )
+    minimum_maintaining_balance = DecimalField(
+        decimal_places=2,
+        max_digits=32,
+        default=0
+    )
+
     # Credit related
-    cut_off = PositiveSmallIntegerField(null=True)
+    cut_off = PositiveSmallIntegerField(
+        blank=True,
+        null=True
+    )
+
     branch = CharField(max_length=64, null=True)
     account_number = CharField(max_length=32, null=True)
     website = URLField(max_length=256, null=True)
     login_url = CharField(max_length=32, null=True)
-

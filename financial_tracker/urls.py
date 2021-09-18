@@ -18,9 +18,16 @@ from django.urls import path
 
 from pages.views import home_view, about_view, contact_view
 from expenses.views import expenses_detailed_view
-from mode_of_payments.views import (
-    mode_of_payment_create_view,
-    mode_of_payment_detailed_view
+from modes_of_payment.views import (
+    create_view,
+    raw_create_view,
+    all_view,
+    detailed_view
+)
+from categories.views import (
+    create_category,
+    get_categories,
+    get_category_by_id
 )
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +35,13 @@ urlpatterns = [
     path('about', about_view),
     path('contact', contact_view),
     path('expense/', expenses_detailed_view),
-    path('mode_of_payments/', mode_of_payment_detailed_view),
-    path('mode_of_payments/create', mode_of_payment_create_view),
+
+    path('categories', get_categories),
+    path('categories/<int:category_id>', get_category_by_id),
+    path('categories/create', create_category),
+
+    path('modes_of_payment/all', all_view),
+    path('modes_of_payment/<int:mop_id>', detailed_view),
+    path('modes_of_payment/create', create_view),
+    path('modes_of_payment/create_raw', raw_create_view),
 ]

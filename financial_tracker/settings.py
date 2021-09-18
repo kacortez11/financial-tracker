@@ -42,12 +42,13 @@ INSTALLED_APPS = [
 
     # own
     'users',
-    'mode_of_payments',
+    'modes_of_payment',
     'categories',
     'expenses',
     'invoices',
     'incomes',
     'transfers',
+    'persons',
     'pages',
 ]
 

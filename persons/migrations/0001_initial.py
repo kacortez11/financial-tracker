@@ -14,17 +14,15 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Invoice',
+            name='Person',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False, unique=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('date_incurred', models.DateField()),
-                ('bill_to', models.CharField(max_length=64)),
-                ('description', models.CharField(max_length=32)),
-                ('subtotal', models.DecimalField(decimal_places=2, max_digits=32)),
-                ('total_amount', models.DecimalField(decimal_places=2, max_digits=32)),
-                ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='users.user')),
+                ('first_name', models.CharField(max_length=16)),
+                ('last_name', models.CharField(max_length=16)),
+                ('display_name', models.CharField(max_length=16, null=True)),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='users.user')),
             ],
             options={
                 'abstract': False,

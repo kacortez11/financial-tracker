@@ -13,7 +13,7 @@ class Income(BaseUserModel):
 	amount = DecimalField(decimal_places=2, max_digits=32, blank=False)
 	details = TextField(null=True)
 	mode_of_payment = ForeignKey(
-		'mode_of_payments.ModeOfPayment',
+		'modes_of_payment.ModeOfPayment',
 		PROTECT,
 		related_name='income_mode_of_payment'
 	)
