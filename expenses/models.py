@@ -57,7 +57,12 @@ class Share(BaseUserModel):
 		related_name='shared_expense_person',
 		null=False
 	)
-	share = DecimalField(decimal_places=2, max_digits=32, null=False)
+	share = DecimalField(
+		decimal_places=2,
+		max_digits=32,
+		blank=True,
+		null=True
+	)
 	paid = BooleanField(default=False)
 	invoice = OneToOneField(
 		'invoices.Invoice',
@@ -117,13 +122,13 @@ class Transportation(BaseUserModel):
 		null=False
 	)
 	origin = ForeignKey(
-		'categories.Destination',
+		'categories.Location',
 		PROTECT,
 		related_name='transportation_origin',
 		null=False
 	)
 	destination = ForeignKey(
-		'categories.Destination',
+		'categories.Location',
 		PROTECT,
 		related_name='transportation_destination',
 		null=False

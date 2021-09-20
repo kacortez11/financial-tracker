@@ -18,8 +18,8 @@ class Category(BaseUserModel):
 		choices=TRANSACTION_TYPES,
 		blank=False
 	)
-	category = CharField(max_length=32, blank=False)
-	label = CharField(max_length=64, blank=False)
+	category = CharField(max_length=32, null=False)
+	description = CharField(max_length=128, blank=True, null=True)
 	has_subcategory = BooleanField(default=False)
 	parent = ForeignKey(
 		'categories.Category',
@@ -27,7 +27,6 @@ class Category(BaseUserModel):
 		related_name='category_parent',
 		null=True
 	)
-	history = JSONField()
 
 	class Meta:
 		constraints = [
@@ -41,6 +40,9 @@ class Category(BaseUserModel):
 			),
 		]
 
+	def __str__(self):
+		return self.category.capitalize()
+
 
 class Merchant(BaseUserModel):
 	merchant = CharField(max_length=64, blank=False)
@@ -51,8 +53,11 @@ class Merchant(BaseUserModel):
 		null=False
 	)
 
+	def __str__(self):
+		return self.merchant
 
-class Destination(BaseUserModel):
+
+class Location(BaseUserModel):
 	category = ForeignKey(  # transpo
 		'categories.Category',
 		PROTECT,
@@ -60,9 +65,11 @@ class Destination(BaseUserModel):
 		null=False
 	)
 	value = CharField(max_length=32, blank=False)
-	label = CharField(max_length=64, blank=False)
 	longitude = FloatField(null=True)
 	latitude = FloatField(null=True)
+
+	def __str__(self):
+		return self.value.capitalize()
 
 
 class Courier(BaseUserModel):
@@ -73,4 +80,6 @@ class Courier(BaseUserModel):
 		null=False
 	)
 	value = CharField(max_length=32, blank=False)
-	label = CharField(max_length=64, blank=False)
+
+	def __str__(self):
+		return self.value.capitalize()

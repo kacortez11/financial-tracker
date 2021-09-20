@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
+
     # own
     'users',
     'modes_of_payment',

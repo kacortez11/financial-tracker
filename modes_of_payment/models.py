@@ -1,7 +1,12 @@
 from django.db.models import (
     BooleanField,
     CharField,
-    DateField, DecimalField, PositiveIntegerField, URLField, UniqueConstraint, PositiveSmallIntegerField,
+    DateField,
+    DecimalField,
+    PositiveIntegerField,
+    URLField,
+    PositiveSmallIntegerField,
+    OneToOneField, PROTECT,
 )
 
 
@@ -96,7 +101,20 @@ class ModeOfPayment(BaseUserModel):
         blank=True,
         null=True
     )
+    limit = DecimalField(
+        decimal_places=2,
+        max_digits=32,
+        blank=True,
+        null=True
+    )
 
+
+class Accounts(BaseUserModel):
+    mop = OneToOneField(
+        'ModeOfPayment',
+        PROTECT,
+        to_field='id'
+    )
     branch = CharField(max_length=64, null=True)
     account_number = CharField(max_length=32, null=True)
     website = URLField(max_length=256, null=True)
