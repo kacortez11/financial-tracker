@@ -1,27 +1,19 @@
+from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer
 
 from categories.models import Category, Merchant, Location, Courier
 
 
 class CategorySerializer(ModelSerializer):
+    subcategories = SerializerMethodField('get_subcategories')
+
+    def get_subcategories(self, obj):
+        test = Category.objects.filter(parent__id=getattr(obj, 'id'))
+        return list(CategorySerializer(test, many=True).data)
+
     class Meta:
         model = Category
         fields = '__all__'
-    #     extra_fields = ['subcategories']
-    #
-    # def get_field_names(self, declared_fields, info):
-    #     expanded_fields = super(
-    #         CategorySerializer,
-    #         self
-    #     ).get_field_names(declared_fields, info)
-    #
-    #     if getattr(self.Meta, 'extra_fields', None):
-    #         return expanded_fields + self.Meta.extra_fields
-    #     else:
-    #         return expanded_fields
-    #
-    # def get_subcategories(self):
-    #     return Category.objects.filter(parent=1)
 
     def create(self, validated_data):
         instance = super().create(validated_data)

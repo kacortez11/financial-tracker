@@ -20,24 +20,25 @@ class CategoryViewSet(ModelViewSet):
 
         return Response(serializer.data or serializer.errors)
 
-    def retrieve(self, request, *args, **kwargs):
-        subcategories = []
-        if request.query_params.get('show_subcategories'):
-            subcategories = Category.objects.filter(
-                parent_id=self.kwargs.get('pk')
-            )
-            subcategories_serializer = self.get_serializer(
-                subcategories,
-                many=True
-            )
-            subcategories = list(subcategories_serializer.data)
-
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        serializer.data['children'] = subcategories
-        return Response(serializer.data)
-
-    def list(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+    # def retrieve(self, request, *args, **kwargs):
+    #     # subcategories = []
+    #     # if request.query_params.get('show_subcategories'):
+    #     #     subcategories = Category.objects.filter(
+    #     #         parent__id=self.kwargs.get('pk')
+    #     #     )
+    #     #     subcategories_serializer = self.get_serializer(
+    #     #         subcategories,
+    #     #         many=True
+    #     #     )
+    #     #     subcategories = list(subcategories_serializer.data)
+    #
+    #     instance = self.get_object()
+    #     serializer = self.get_serializer(instance)
+    #
+    #     # serializer.data['children'] = subcategories
+    #     return Response(serializer.data)
+    #
+    # def list(self, request, *args, **kwargs):
+    #     instance = self.get_object()
+    #     serializer = self.get_serializer(instance)
+    #     return Response(serializer.data)
