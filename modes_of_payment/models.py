@@ -5,8 +5,7 @@ from django.db.models import (
     DecimalField,
     PositiveIntegerField,
     URLField,
-    PositiveSmallIntegerField,
-    OneToOneField, PROTECT,
+    PositiveSmallIntegerField
 )
 
 
@@ -50,7 +49,7 @@ class ModeOfPayment(BaseUserModel):
     SOM = 1
     EOM = 30
 
-    value = CharField(max_length=32, null=False)
+    value = CharField(max_length=32, null=False, unique=True)
     label = CharField(max_length=32, null=False)
     type = CharField(max_length=32, choices=TYPES, null=False)
     debit = BooleanField(default=True)  # False means credit
@@ -59,7 +58,7 @@ class ModeOfPayment(BaseUserModel):
     priority = PositiveIntegerField(default=99)
     default = BooleanField(default=False)
 
-    currency = CharField(max_length=4, default='PHP', null=False)
+    currency = CharField(max_length=4, default='PHP', blank=True, null=False)
     starting_balance = DecimalField(decimal_places=2, max_digits=32, default=0)
 
     # Savings related
@@ -93,7 +92,9 @@ class ModeOfPayment(BaseUserModel):
     minimum_maintaining_balance = DecimalField(
         decimal_places=2,
         max_digits=32,
-        default=0
+        default=0,
+        blank=True,
+        null=True
     )
 
     # Credit related
@@ -107,14 +108,7 @@ class ModeOfPayment(BaseUserModel):
         blank=True,
         null=True
     )
-
-
-class Accounts(BaseUserModel):
-    mop = OneToOneField(
-        'ModeOfPayment',
-        PROTECT,
-        to_field='id'
-    )
+    # Account related
     branch = CharField(max_length=64, null=True)
     account_number = CharField(max_length=32, null=True)
     website = URLField(max_length=256, null=True)

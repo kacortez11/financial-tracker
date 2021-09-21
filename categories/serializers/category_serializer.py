@@ -1,7 +1,7 @@
 from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer
 
-from categories.models import Category, Merchant, Location, Courier
+from categories.models import Category
 
 
 class CategorySerializer(ModelSerializer):
@@ -63,21 +63,3 @@ class CategorySerializer(ModelSerializer):
             return None
 
         return f"{_type.capitalize()}s related to {_category.capitalize()}"
-
-
-class MerchantSerializer(ModelSerializer):
-    class Meta:
-        model = Merchant
-        fields = '__all__'
-
-
-class LocationSerializer(ModelSerializer):
-    class Meta:
-        model = Location
-        fields = '__all__'
-
-
-class CourierSerializer(ModelSerializer):
-    class Meta:
-        model = Courier
-        fields = '__all__'

@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'invoices',
     'incomes',
     'transfers',
-    'persons',
     'pages',
 ]
 

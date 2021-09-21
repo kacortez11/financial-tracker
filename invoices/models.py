@@ -5,7 +5,7 @@ from core.models import BaseModel, BaseUserModel
 
 class Invoice(BaseUserModel):
 	bill_to = ForeignKey(
-		'persons.Person',
+		'users.Person',
 		PROTECT,
 		related_name='person_to_invoice',
 		null=False

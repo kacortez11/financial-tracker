@@ -52,7 +52,7 @@ class Share(BaseUserModel):
 		null=False
 	)
 	shared_with = ForeignKey(
-		'persons.Person',
+		'users.Person',
 		PROTECT,
 		related_name='shared_expense_person',
 		null=False

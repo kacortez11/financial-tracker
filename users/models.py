@@ -21,6 +21,16 @@ class User(BaseModel):
         return self.display_name or f"{self.first_name} {self.last_name}"
 
 
+class Person(BaseUserModel):
+    user = ForeignKey('users.User', PROTECT, null=False)
+    first_name = CharField(max_length=32, blank=False, null=False)
+    last_name = CharField(max_length=32, blank=False, null=False)
+    display_name = CharField(max_length=64, null=True)
+
+    def __str__(self):
+        return self.display_name or f"{self.first_name} {self.last_name}"
+
+
 class Subscription(BaseUserModel):
     DAILY = 1
     WEEKLY = 7
