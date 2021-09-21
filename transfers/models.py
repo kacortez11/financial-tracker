@@ -1,4 +1,7 @@
-from django.db.models import CharField, ForeignKey, PROTECT, DecimalField, DateField
+from django.db.models import (
+	CharField, ForeignKey, PROTECT, DecimalField,
+	DateField, CheckConstraint, Q, F,
+)
 
 from core.models import BaseModel, BaseUserModel
 
@@ -36,3 +39,11 @@ class Transfer(BaseUserModel):
 		related_name='destination',
 		null=False
 	)
+
+	class Meta:
+		constraints = [
+			CheckConstraint(
+				name='source_different_from_destination',
+				check=~Q(source=F('destination')),
+			),
+		]

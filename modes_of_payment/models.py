@@ -113,3 +113,6 @@ class ModeOfPayment(BaseUserModel):
     account_number = CharField(max_length=32, null=True)
     website = URLField(max_length=256, null=True)
     login_url = CharField(max_length=32, null=True)
+
+    def __str__(self):
+        return self.label

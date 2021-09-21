@@ -19,7 +19,8 @@ class ModeOfPaymentSerializer(ModelSerializer):
         instance = super().create(validated_data)
         instance.value = validated_data.get('value')
 
-        if validated_data.get('label') == '':
+        if (validated_data.get('label') == '' or
+                validated_data.get('label') is None):
             instance.label = validated_data.get('value').capitalize()
         else:
             instance.label = validated_data.get('label')
@@ -46,6 +47,7 @@ class ModeOfPaymentSerializer(ModelSerializer):
             instance.cut_off = validated_data.get('cut_off')
             instance.limit = validated_data.get('limit')
 
+        instance.currency = validated_data.get('currency', 'PHP')
         # if this is default, set all others to default false
         instance.save()
 
@@ -54,7 +56,8 @@ class ModeOfPaymentSerializer(ModelSerializer):
     def update(self, instance, validated_data):
         instance.value = validated_data.get('value')
 
-        if validated_data.get('label') == '':
+        if (validated_data.get('label') == '' or
+                validated_data.get('label') is None):
             instance.label = validated_data.get('value').capitalize()
         else:
             instance.label = validated_data.get('label')
@@ -90,6 +93,7 @@ class ModeOfPaymentSerializer(ModelSerializer):
             instance.cut_off = validated_data.get('cut_off', instance.cut_off)
             instance.limit = validated_data.get('limit', instance.limit)
 
+        instance.currency = validated_data.get('currency', 'PHP')
         # if this is default, set all others to default false
         instance.save()
 

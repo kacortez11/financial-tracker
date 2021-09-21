@@ -1,5 +1,7 @@
 from django.db.models import (
-	BooleanField, ForeignKey, PROTECT, DateField, DecimalField, UniqueConstraint, CharField, OneToOneField, TextField
+	BooleanField, ForeignKey, PROTECT, DateField, DecimalField,
+	UniqueConstraint, CharField, OneToOneField, TextField, CheckConstraint, Q,
+	F,
 )
 
 from core.models import BaseModel, BaseUserModel
@@ -7,8 +9,8 @@ from invoices.models import Invoice
 
 
 class Expense(BaseUserModel):
-	date_incurred = DateField(blank=False)
-	date_posted = DateField(blank=False)
+	date_incurred = DateField(blank=False, null=False)
+	date_posted = DateField(blank=True, null=True)
 	mode_of_payment = ForeignKey(
 		'modes_of_payment.ModeOfPayment',
 		PROTECT,
@@ -38,10 +40,26 @@ class Expense(BaseUserModel):
 	expense = OneToOneField(
 		'Expense',
 		PROTECT,
-		related_name='revered_expense',
+		related_name='reversed_expense',
 		null=True
 	)
-	date_reversed = DateField(null=True)
+	date_reversed = DateField(default=None, null=True)
+
+	class Meta:
+		constraints = [
+			CheckConstraint(
+				name='incurred_before_posted',
+				check=Q(date_posted__gte=F('date_incurred')),
+			),
+			CheckConstraint(
+				name='incurred_before_reversed',
+				check=Q(date_reversed__gte=F('date_incurred')),
+			),
+			CheckConstraint(
+				name='posted_before_reversed',
+				check=Q(date_reversed__gte=F('date_posted')),
+			),
+		]
 
 
 class Share(BaseUserModel):
@@ -226,23 +244,23 @@ class OnlineShopping(BaseUserModel):
 	)
 
 
-class Cat(BaseUserModel):
+class Pet(BaseUserModel):
 	expense = ForeignKey(
 		'Expense',
 		PROTECT,
-		related_name='cat_expense',
+		related_name='pet_expense',
 		null=False
 	)
 	merchant = ForeignKey(
 		'categories.Merchant',
 		PROTECT,
-		related_name='cat_merchant',
+		related_name='pet_merchant',
 		null=False
 	)
 	purchase_category = ForeignKey(
 		'categories.Category',
 		PROTECT,
-		related_name='cat_purchase_category',
+		related_name='pet_purchase_category',
 		null=False
 	)
 	particulars = TextField(null=False)
@@ -250,6 +268,6 @@ class Cat(BaseUserModel):
 	courier = ForeignKey(
 		'categories.Courier',
 		PROTECT,
-		related_name='cat_purchase_courier',
+		related_name='pet_purchase_courier',
 		null=True
 	)
