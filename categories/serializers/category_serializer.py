@@ -8,8 +8,8 @@ class CategorySerializer(ModelSerializer):
     subcategories = SerializerMethodField('get_subcategories')
 
     def get_subcategories(self, obj):
-        test = Category.objects.filter(parent__id=getattr(obj, 'id'))
-        return list(CategorySerializer(test, many=True).data)
+        subcategories = Category.objects.filter(parent__id=getattr(obj, 'id'))
+        return list(CategorySerializer(subcategories, many=True).data)
 
     class Meta:
         model = Category

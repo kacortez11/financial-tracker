@@ -4,6 +4,8 @@ from categories.viewsets.category_viewset import CategoryViewSet
 from categories.viewsets.courier_viewset import CourierViewSet
 from categories.viewsets.location_viewset import LocationViewSet
 from categories.viewsets.merchant_viewset import MerchantViewSet
+from incomes.viewset import IncomeViewSet
+from invoices.viewset import InvoiceViewSet
 from modes_of_payment.viewsets import ModeOfPaymentViewSet
 from transfers.viewset import TransferViewSet
 from users.viewsets.subscription_viewset import SubscriptionViewSet
@@ -22,8 +24,8 @@ router.register(
     basename='mode-of-payment'
 )
 router.register('expenses', CategoryViewSet, basename='expense')
-router.register('incomes', CategoryViewSet, basename='income')
-router.register('invoices', CategoryViewSet, basename='invoice')
+router.register('incomes', IncomeViewSet, basename='income')
+router.register('invoices', InvoiceViewSet, basename='invoice')
 router.register('transfers', TransferViewSet, basename='transfer')
 router.register('users', UserViewSet, basename='user')
 router.register('persons', PersonViewSet, basename='person')
