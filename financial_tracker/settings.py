@@ -43,13 +43,13 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # own
-    'users',
-    'modes_of_payment',
-    'categories',
-    'expenses',
-    'invoices',
-    'incomes',
-    'transfers',
+    'api.users',
+    'api.modes_of_payment',
+    'api.categories',
+    'api.expenses',
+    'api.invoices',
+    'api.incomes',
+    'api.transfers',
     'pages',
 ]
 
