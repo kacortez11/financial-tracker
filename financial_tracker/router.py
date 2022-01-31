@@ -5,6 +5,7 @@ from api.categories.viewsets.courier_viewset import CourierViewSet
 from api.categories.viewsets.location_viewset import LocationViewSet
 from api.categories.viewsets.merchant_viewset import MerchantViewSet
 from api.expenses.viewsets.expense_viewset import ExpenseViewSet
+from api.expenses.viewsets.meal_viewset import MealViewSet
 from api.incomes.viewset import IncomeViewSet
 from api.invoices.viewset import InvoiceViewSet
 from api.modes_of_payment.viewsets import ModeOfPaymentViewSet
@@ -35,3 +36,6 @@ router.register(
     SubscriptionViewSet,
     basename='subscription'
 )
+
+
+router.register('meals', MealViewSet, basename='meal')

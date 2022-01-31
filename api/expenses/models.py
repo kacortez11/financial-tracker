@@ -1,3 +1,5 @@
+from enum import Enum
+
 from django.db.models import (
 	BooleanField, ForeignKey, PROTECT, DateField, DecimalField,
 	UniqueConstraint, CharField, OneToOneField, TextField, CheckConstraint, Q,
@@ -8,6 +10,27 @@ from api.core.models import BaseModel, BaseUserModel
 
 
 class Expense(BaseUserModel):
+	MEAL = 4
+	PET = 5
+	TRANSPORTATION = 6
+	ADULTING = 7
+	LOAN = 8
+	FRIENDLY_LOAN = 9
+	MEDICAL = 10
+	HOBBIES = 11
+	ALIGNMENT = 12
+
+	ExpenseCategories = (
+		(MEAL, 'Meal'),
+		(PET, 'Pet'),
+		(TRANSPORTATION, 'Transportation'),
+		(ADULTING, 'Adulting'),
+		(LOAN, 'Loan'),
+		(MEDICAL, 'Medical'),
+		(HOBBIES, 'Hobbies'),
+		(ALIGNMENT, 'Alignment')
+	)
+
 	date_incurred = DateField(blank=False, null=False)
 	date_posted = DateField(blank=True, null=True)
 	mode_of_payment = ForeignKey(
@@ -38,6 +61,7 @@ class Expense(BaseUserModel):
 		'categories.Category',
 		on_delete=PROTECT,
 		related_name='expense_category',
+		choices=ExpenseCategories,
 		null=False
 	)
 	is_reversal = BooleanField(default=False)
@@ -66,6 +90,10 @@ class Expense(BaseUserModel):
 			CheckConstraint(
 				name='my_share_lte_to_total_amount',
 				check=Q(my_share__lte=F('total_amount')),
+			),
+			CheckConstraint(
+				name='total_amount_computation_valid',
+				check=Q(total_amount__lte=F('total_amount')),
 			),
 		]
 
@@ -111,7 +139,7 @@ class Meal(BaseUserModel):
 		'Expense',
 		on_delete=PROTECT,
 		related_name='meal_expense',
-		null=False
+		null=True
 	)
 	type = ForeignKey(
 		'categories.Category',
@@ -204,10 +232,10 @@ class Adulting(BaseUserModel):
 
 
 class LoanCreditCard(BaseUserModel):
-	adulting = ForeignKey(
-		'Adulting',
+	expense = OneToOneField(
+		'expenses.Expense',
 		on_delete=PROTECT,
-		related_name='adulting',
+		related_name='loan_expense',
 		null=False
 	)
 	charge_type = ForeignKey(
@@ -222,6 +250,23 @@ class LoanCreditCard(BaseUserModel):
 		related_name='credit_account',
 		null=False
 	)
+
+
+class FriendlyLoan(BaseUserModel):
+	expense = OneToOneField(
+		'Expense',
+		on_delete=PROTECT,
+		related_name='friendly_loan_expense',
+		null=False
+	)
+	friend = ForeignKey(
+		'users.Person',
+		on_delete=PROTECT,
+		related_name='friend',
+		null=False
+	)
+	date_to_pay = DateField(null=False)
+	details = TextField(null=True)
 
 
 class OnlineShopping(BaseUserModel):

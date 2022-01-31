@@ -1,0 +1,181 @@
+[
+    {
+        "model": "categories.category",
+        "pk": 1,
+        "fields": {
+            "created_at": "2021-09-21T14:49:46.631Z",
+            "updated_at": "2021-09-21T14:49:46.640Z",
+            "user": 1,
+            "transaction_type": "expense",
+            "category": "expense",
+            "description": null,
+            "has_subcategory": true,
+            "parent": null
+        }
+    },
+    {
+        "model": "categories.category",
+        "pk": 2,
+        "fields": {
+            "created_at": "2021-09-22T17:57:10.508Z",
+            "updated_at": "2021-09-22T17:57:10.516Z",
+            "user": 1,
+            "transaction_type": "income",
+            "category": "Income",
+            "description": null,
+            "has_subcategory": true,
+            "parent": null
+        }
+    },
+    {
+        "model": "categories.category",
+        "pk": 3,
+        "fields": {
+            "created_at": "2021-09-22T17:57:34.204Z",
+            "updated_at": "2021-09-22T17:57:34.212Z",
+            "user": 1,
+            "transaction_type": "transfer",
+            "category": "Transfer",
+            "description": null,
+            "has_subcategory": true,
+            "parent": null
+        }
+    },
+    {
+        "model": "categories.category",
+        "pk": 4,
+        "fields": {
+            "created_at": "2021-09-22T17:57:47.549Z",
+            "updated_at": "2021-09-22T17:57:47.557Z",
+            "user": 1,
+            "transaction_type": "expense",
+            "category": "meal",
+            "description": "Expenses related to Meal",
+            "has_subcategory": true,
+            "parent": 1
+        }
+    },
+    {
+        "model": "categories.category",
+        "pk": 5,
+        "fields": {
+            "created_at": "2021-09-23T16:46:00.123Z",
+            "updated_at": "2021-09-23T16:46:00.134Z",
+            "user": 1,
+            "transaction_type": "expense",
+            "category": "pet",
+            "description": "Expenses related to Pet",
+            "has_subcategory": true,
+            "parent": 1
+        }
+    },
+    {
+        "model": "categories.category",
+        "pk": 6,
+        "fields": {
+            "created_at": "2021-09-23T16:46:24.160Z",
+            "updated_at": "2021-09-23T16:46:24.172Z",
+            "user": 1,
+            "transaction_type": "expense",
+            "category": "transportation",
+            "description": "Expenses related to Transportation",
+            "has_subcategory": true,
+            "parent": 1
+        }
+    },
+    {
+        "model": "categories.category",
+        "pk": 7,
+        "fields": {
+            "created_at": "2021-09-23T16:46:41.680Z",
+            "updated_at": "2021-09-23T16:46:41.691Z",
+            "user": 1,
+            "transaction_type": "expense",
+            "category": "adulting",
+            "description": "Expenses related to Adulting",
+            "has_subcategory": false,
+            "parent": 1
+        }
+    },
+    {
+        "model": "categories.category",
+        "pk": 8,
+        "fields": {
+            "created_at": "2021-09-23T16:47:03.373Z",
+            "updated_at": "2021-09-23T16:51:03.883Z",
+            "user": 1,
+            "transaction_type": "expense",
+            "category": "loan",
+            "description": "Expenses related to Loan",
+            "has_subcategory": true,
+            "parent": 1
+        }
+    },
+    {
+        "model": "categories.category",
+        "pk": 9,
+        "fields": {
+            "created_at": "2022-01-30T08:39:21.481Z",
+            "updated_at": "2022-01-30T13:25:36.944Z",
+            "user": 1,
+            "transaction_type": "expense",
+            "category": "friendly_loans",
+            "description": "Expenses related to Friendly Loans",
+            "has_subcategory": true,
+            "parent": 1
+        }
+    },
+    {
+        "model": "categories.category",
+        "pk": 10,
+        "fields": {
+            "created_at": "2022-01-30T08:46:51.648Z",
+            "updated_at": "2022-01-30T08:46:51.656Z",
+            "user": 1,
+            "transaction_type": "expense",
+            "category": "medical",
+            "description": "Expenses related to Medical",
+            "has_subcategory": true,
+            "parent": 1
+        }
+    },
+    {
+        "model": "categories.category",
+        "pk": 11,
+        "fields": {
+            "created_at": "2022-01-30T08:47:19.047Z",
+            "updated_at": "2022-01-30T08:47:19.054Z",
+            "user": 1,
+            "transaction_type": "expense",
+            "category": "hobbies",
+            "description": "Expenses related to Hobbies",
+            "has_subcategory": true,
+            "parent": 1
+        }
+    },
+    {
+        "model": "categories.category",
+        "pk": 12,
+        "fields": {
+            "created_at": "2022-01-30T08:47:51.478Z",
+            "updated_at": "2022-01-30T08:47:51.487Z",
+            "user": 1,
+            "transaction_type": "expense",
+            "category": "alignment",
+            "description": "Expenses Alignment",
+            "has_subcategory": true,
+            "parent": 1
+        }
+    },
+    {
+        "model": "categories.merchant",
+        "pk": 1,
+        "fields": {
+            "created_at": "2021-09-24T17:13:36.474Z",
+            "updated_at": "2021-09-24T17:13:36.474Z",
+            "user": 1,
+            "merchant": "Mcdo",
+            "category": 4
+        }
+    }
+]

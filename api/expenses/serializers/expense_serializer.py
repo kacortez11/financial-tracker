@@ -7,6 +7,8 @@ from api.categories.models import Category
 from api.categories.serializers.category_serializer import CategorySerializer
 from api.expenses.models import Expense, Share
 from api.expenses.serializers.adulting_serializer import AdultingSerializer
+from api.expenses.serializers.friendly_loan_serializer import \
+    FriendlyLoanSerializer
 from api.expenses.serializers.loan_credit_card_serializer import \
     LoanCreditCardSerializer
 from api.expenses.serializers.meal_serializer import MealSerializer
@@ -23,14 +25,15 @@ from api.modes_of_payment.serializer import ModeOfPaymentSerializer
 
 class ExpenseSerializer(ModelSerializer):
     details = JSONField(binary=True, read_only=True)
-    shared_with = ShareSerializer(many=True)
-    adulting = AdultingSerializer(allow_null=True)
-    loan = LoanCreditCardSerializer(allow_null=True)
-    meal = MealSerializer(allow_null=True)
-    medical = MedicalSerializer(allow_null=True)
-    online_shopping = OnlineShoppingSerializer(allow_null=True)
-    pet = PetSerializer(allow_null=True)
-    transportation = TransportationSerializer(allow_null=True)
+    shared_with = ShareSerializer(many=True, required=False, allow_null=True)
+    adulting = AdultingSerializer(allow_null=True, required=False)
+    loan = LoanCreditCardSerializer(allow_null=True, required=False)
+    friendly_loan = FriendlyLoanSerializer(allow_null=True, required=False)
+    meal = MealSerializer(allow_null=True, required=False)
+    medical = MedicalSerializer(allow_null=True, required=False)
+    online_shopping = OnlineShoppingSerializer(allow_null=True, required=False)
+    pet = PetSerializer(allow_null=True, required=False)
+    transportation = TransportationSerializer(allow_null=True, required=False)
     # mode_of_payment = PrimaryKeyRelatedField(
     #     queryset=ModeOfPayment.objects.filter(user=1)
     # )
@@ -51,51 +54,79 @@ class ExpenseSerializer(ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        shared_with = validated_data.pop('shared_with')
-        details = validated_data.pop('details')
+        shared_with = validated_data.pop('shared_with', None)
+        details = validated_data.pop('details', None)
+        adulting = validated_data.pop('adulting', None)
+        loan = validated_data.pop('loan', None)
+        friendly_loan = validated_data.pop('loan', None)
+        meal = validated_data.pop('meal', None)
+        medical = validated_data.pop('medical', None)
+        online_shopping = validated_data.pop('online_shopping', None)
+        pet = validated_data.pop('pet', None)
+        transportation = validated_data.pop('transportation', None)
+
+        if validated_data.get('total_amount') != (
+                validated_data.get('merchandise_total') -
+                validated_data.get('merchandise_discount') +
+                validated_data.get('shipping_fee') -
+                validated_data.get('shipping_discount') +
+                validated_data.get('service_fee')
+        ):
+            return False
+
         instance = super().create(validated_data)
-        instance.date_incurred = validated_data.get('date_incurred')
         instance.date_posted = validated_data.get(
             'date_posted',
             instance.date_incurred
         )
-
-        instance.mode_of_payment = validated_data.get('mode_of_payment')
-        instance.total_amount = validated_data.get('total_amount')
-        instance.my_share = validated_data.get('my_share')
-        instance.merchandise_total = validated_data.get('merchandise_total')
-        instance.merchandise_discount = validated_data.get(
-            'merchandise_discount'
-        )
-        instance.shipping_fee = validated_data.get('shipping_fee')
-        instance.shipping_discount = validated_data.get('shipping_discount')
-        instance.service_fee = validated_data.get('service_fee')
-        instance.expected_cashback = validated_data.get('expected_cashback')
-        instance.is_pending = validated_data.get('is_pending')
-        instance.category = validated_data.get('category')
-        instance.is_reversal = validated_data.get('is_reversal')
-        instance.expense = validated_data.get('expense')
-        instance.date_reversed = validated_data.get('date_reversed')
-
-        instance.save()
+        if shared_with is not None and validated_data.get('my_share') is None:
+            return False # return error if shared but my_share is empty
+        # instance.save()
 
         if shared_with is not None:
             for share in shared_with:
-                Share.objects.create(
-                    expense=instance.id,
-                    shared_with=share.get('name'),
-                    share=share.get('share'),
-                    paid=share.get('paid')
-                )
+                share['expense'] = instance
+                Share.objects.create(share)
 
-        if instance.category == 1: # Adulting
-            pass
-        elif instance.category == 2: #Meal
-            pass
-        elif instance.category == 3: #Transpo
-            pass
+        expense_categories = self._category_under_expense(1).values_list('id', flat=True)
+        if instance.category_id in expense_categories:
+            if instance.category_id == Expense.MEAL:
+                meal['expense'] = instance
+                MealSerializer().create(meal)
+
+            elif instance.category_id == Expense.PET:
+                pet['expense'] = instance
+                MealSerializer().create(pet)
+
+            elif instance.category_id == Expense.TRANSPORTATION:
+                transportation['expense'] = instance
+                MealSerializer().create(transportation)
+
+            elif instance.category_id == Expense.ADULTING:
+                adulting['expense'] = instance
+                AdultingSerializer().create(adulting)
+
+            elif instance.category_id == Expense.LOAN:
+                loan['expense'] = instance
+                LoanCreditCardSerializer().create(loan)
+
+            elif instance.category_id == Expense.FRIENDLY_LOAN:
+                loan['expense'] = instance
+                FriendlyLoanSerializer().create(loan)
+
+            elif instance.category_id == Expense.MEDICAL:
+                medical['expense'] = instance
+                MedicalSerializer().create(medical)
+
+            elif instance.category_id == Expense.HOBBIES:
+                adulting['expense'] = instance
+                AdultingSerializer().create(adulting)
+
+            elif instance.category_id == Expense.HOBBIES:
+                adulting['expense'] = instance
+                AdultingSerializer().create(adulting)
         else:
-            pass
+            return False
 
         return instance
 
@@ -107,5 +138,14 @@ class ExpenseSerializer(ModelSerializer):
 
     @staticmethod
     def _category_under_expense(_category):
-        Category.objects.filter(type='expense', parent_id=1)
-        return False
+        return Category.objects.filter(parent_id=_category)
+
+    @staticmethod
+    def computation_valid(data):
+        return data.get('total_amount') != (
+                data.get('merchandise_total') -
+                data.get('merchandise_discount') +
+                data.get('shipping_fee') -
+                data.get('shipping_discount') +
+                data.get('service_fee')
+        )
